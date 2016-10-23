@@ -12,6 +12,7 @@ class PlayerVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var players = Player.createPlayers()
+    var selectedPlayer = Player()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +21,22 @@ class PlayerVC: UIViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        guard let detailVC = segue.destinationViewController as? DetailVC else {
+            return
+        }
+        detailVC.player = self.selectedPlayer
+    }
     
 }
 
 extension PlayerVC: UITableViewDelegate {
+    
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.selectedPlayer = players[indexPath.row]
+        self.performSegueWithIdentifier("goToDetail", sender: nil)
+    }
     
 }
 
